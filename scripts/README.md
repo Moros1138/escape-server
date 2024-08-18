@@ -1,0 +1,1 @@
+The scripts in this directory are for testing or maintenance and should be run on production ONLY if you know exactly what you're doing!
