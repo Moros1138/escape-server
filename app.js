@@ -167,7 +167,7 @@ export default function defineApi(app, races)
     {
         const params = {
             sort: "ASC",
-            map: "",
+            mode: "",
             offset: 0,
             limit: 10,
             sortBy: "id"
@@ -186,9 +186,9 @@ export default function defineApi(app, races)
             }
         }
 
-        if(request.query.map)
+        if(request.query.mode)
         {
-            params.map = request.query.map;
+            params.mode = request.query.mode;
         }
 
         if(request.query.offset)
@@ -203,7 +203,7 @@ export default function defineApi(app, races)
 
         if(request.query.sortBy)
         {
-            if(['id', 'color', 'map', 'time', 'created_at'].indexOf(request.query.sortBy) !== -1)
+            if(['id', 'mode', 'time', 'created_at'].indexOf(request.query.sortBy) !== -1)
             {
                 params.sortBy = request.query.sortBy;
             }
@@ -214,12 +214,12 @@ export default function defineApi(app, races)
         {
             const stmt = races.prepare(`
                 SELECT * FROM races
-                WHERE map = ?
+                WHERE mode = ?
                 ORDER BY ${params.sortBy} ${params.sort}
                 LIMIT ? OFFSET ?;
             `);
         
-            results = stmt.all(params.map, params.limit, params.offset);
+            results = stmt.all(params.mode, params.limit, params.offset);
 
         }
         catch(e)
@@ -426,8 +426,7 @@ export default function defineApi(app, races)
         let missingParameters = ExtractMissingParameters([
             "raceId",
             "raceTime",
-            "raceMap",
-            "raceColor",
+            "raceMode",
         ], request);
 
         if(missingParameters.length > 0)
@@ -492,12 +491,11 @@ export default function defineApi(app, races)
 
         try
         {
-            const insertRace = races.prepare("INSERT INTO `races` (`color`, `name`, `map`, `time`) VALUES (@color, @name, @map, @time);");
+            const insertRace = races.prepare("INSERT INTO `races` (`name`, `mode`, `time`) VALUES (@name, @mode, @time);");
         
             insertRace.run({
-                color: request.body.raceColor,
                 name: request.session.userName,
-                map: request.body.raceMap,
+                mode: request.body.raceMode,
                 time: request.body.raceTime,
             });
         }
