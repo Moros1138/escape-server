@@ -35,11 +35,6 @@ races.exec(`CREATE TABLE IF NOT EXISTS 'races' (
 
 app.use(morgan("tiny"));
 
-app.get("/leaderboard.html", (request, response) =>
-{
-    response.sendFile(join(__dirname, "public", "leaderboard.html"));
-});
-
 app.use(express.static("public"));
 
 if(publicDirectory !== "public")
