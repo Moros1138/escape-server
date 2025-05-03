@@ -1,8 +1,14 @@
-[![Node.js CI](https://github.com/Moros1138/hamster-server/actions/workflows/node.js.yml/badge.svg?branch=main)](https://github.com/Moros1138/hamster-server/actions/workflows/node.js.yml)
+[![Node.js CI](https://github.com/Moros1138/escape-server/actions/workflows/node.js.yml/badge.svg?branch=main)](https://github.com/Moros1138/escape-server/actions/workflows/node.js.yml)
 
-# Hamster Server
+# Escape Server
 
-This is the server developed in a joint effort by Moros1138 and sigonasr2 as part of the OneLoneCoder 2024 CodeJam. It is tailored for that project and presented here for educational and mockery purposes!
+This is the server that handles the scoreboard of
+Aleksandar Sherbula's Escape the Machine!
+
+The original server was developed in a joint effort
+by Moros1138 and sigonasr2 as part of the OneLoneCoder
+2024 CodeJam. It was tailored for that project and
+has now been repurposed for Escape the Machine!
 
 # Setup
 
@@ -16,7 +22,7 @@ The ``.env.example`` contains an example environment configuration. rename it to
 
 ``PUBLIC_DIRECTORY`` - this is the directory express will use to serve static files. - default: ``public``
 
-**Note: It is useful to point this to the emscripten build directory of the Hamster project!** 
+**Note: It is useful to point this to the emscripten build directory of the Escape the Machine project!** 
 
 ```
 npm install
