@@ -14,9 +14,8 @@ const races = new Database(":memory:");
 
 races.exec(`CREATE TABLE IF NOT EXISTS 'races' (
     'id' INTEGER PRIMARY KEY AUTOINCREMENT,
-    'color' TEXT,
     'name' TEXT,
-    'map' TEXT,
+    'mode' TEXT,
     'time' INTEGER,
     'created_at' TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )`);
@@ -396,7 +395,7 @@ describe("ENDPOINT /race - with cookie set", () =>
             
                 test.cookies = sessionCookie;
                 
-                test.send({ raceId: raceId, raceTime: 50, raceMap: "the-map", raceColor: "white" })
+                test.send({ raceId: raceId, raceTime: 50, raceMode: "the-mode" })
                     .expect(200)
                     .end((err, res) =>
                     {
@@ -417,7 +416,7 @@ describe("ENDPOINT /race - with cookie set", () =>
             
                 test.cookies = sessionCookie;
                 
-                test.send({ raceId: raceId, raceTime: 1000, raceMap: "the-map", raceColor: "white" })
+                test.send({ raceId: raceId, raceTime: 1000, raceMode: "the-mode" })
                     .expect(200)
                     .end((err, res) =>
                     {
@@ -441,7 +440,7 @@ describe("ENDPOINT /race - with cookie set", () =>
             
                 test.cookies = sessionCookie;
                 
-                test.send({ raceId: raceId, raceTime: 2000, raceMap: "the-map", raceColor: "white" })
+                test.send({ raceId: raceId, raceTime: 2000, raceMode: "the-mode" })
                     .expect(400)
                     .expect(/raceTime mismatch/)
                     .end((err, res) =>
@@ -643,21 +642,19 @@ describe("GET /race", () =>
     before(function()
     {
         const racesToInsert = [];
-        const colors = ["white", "black", "blue", "green", "red", "yellow", "orange"];
 
         for(let i = 0; i < 50; i++)
         {
             racesToInsert.push({
-                color: colors[Math.floor(Math.random() * colors.length)],
                 name: `Entry${i+1}`,
-                map: "map1",
+                mode: "normal",
                 time: (i + 1)
             });
         }
         
         racesToInsert.sort(() => Math.random() - 0.5);
 
-        let stmt = races.prepare("INSERT INTO `races` (`color`, `name`, `map`, `time`) VALUES (@color, @name, @map, @time);");
+        let stmt = races.prepare("INSERT INTO `races` (`name`, `mode`, `time`) VALUES (@name, @mode, @time);");
         
         racesToInsert.forEach((race) =>
         {
@@ -683,7 +680,7 @@ describe("GET /race", () =>
 
     it("should respond with 10 results on a default call", (done) =>
     {
-        const test = request(app).get("/race?map=map1");
+        const test = request(app).get("/race?mode=normal");
         
         test.expect(200)
             .end((err, res) =>
@@ -706,7 +703,7 @@ describe("GET /race", () =>
 
     it("should respond with 0 results when a map does not exist", (done) =>
     {
-        const test = request(app).get("/race?map=map-not-exist");
+        const test = request(app).get("/race?mode=mode-not-exist");
         
         test.expect(200)
             .end((err, res) =>
@@ -734,7 +731,7 @@ describe("GET /race", () =>
     
     it("should respond with 10 results sorted by `time` in ascending order", (done) =>
     {
-        const test = request(app).get("/race?map=map1&sortBy=time&sort=ASC");
+        const test = request(app).get("/race?mode=normal&sortBy=time&sort=ASC");
         
         test.expect(200)
             .end((err, res) =>
@@ -766,7 +763,7 @@ describe("GET /race", () =>
     
     it("should respond with 10 results sorted by `time` in descending order", (done) =>
     {
-        const test = request(app).get("/race?map=map1&sortBy=time&sort=DESC");
+        const test = request(app).get("/race?mode=normal&sortBy=time&sort=DESC");
         
         test.expect(200)
             .end((err, res) =>
@@ -798,7 +795,7 @@ describe("GET /race", () =>
     
     it("should respond with 5 results when limit is set to 5", (done) =>
     {
-        const test = request(app).get("/race?map=map1&limit=5");
+        const test = request(app).get("/race?mode=normal&limit=5");
         
         test.expect(200)
             .end((err, res) =>
@@ -821,11 +818,11 @@ describe("GET /race", () =>
 
     it("should respond with 1 result offset by 0", (done) =>
     {
-        request(app).get("/race?map=map1&limit=10&offset=0").end((err, res) =>
+        request(app).get("/race?mode=normal&limit=10&offset=0").end((err, res) =>
         {
             const baselineResults = res.body.results;
 
-            const test = request(app).get("/race?map=map1&limit=1&offset=0");
+            const test = request(app).get("/race?mode=normal&limit=1&offset=0");
         
             test.expect(200)
                 .end((err, res) =>
@@ -856,11 +853,11 @@ describe("GET /race", () =>
     
     it("should respond with 1 result offset by 5", (done) =>
     {
-        request(app).get("/race?map=map1&limit=10&offset=0").end((err, res) =>
+        request(app).get("/race?mode=normal&limit=10&offset=0").end((err, res) =>
         {
             const baselineResults = res.body.results;
 
-            const test = request(app).get("/race?map=map1&limit=1&offset=5");
+            const test = request(app).get("/race?mode=normal&limit=1&offset=5");
         
             test.expect(200)
                 .end((err, res) =>
@@ -1161,7 +1158,7 @@ describe("ENDPOINT /pause - needs to test during a race!", () =>
                                         }
    
                                         pauseTotal += (Date.now() - pauseStartTime);
-                                        console.log("PAUSE TOTAL: ", pauseTotal);
+                                        // console.log("PAUSE TOTAL: ", pauseTotal);
                                         
                                         setTimeout(() =>
                                         {
@@ -1170,9 +1167,9 @@ describe("ENDPOINT /pause - needs to test during a race!", () =>
                                             endTime = Date.now();
                                             const raceTotal = (endTime - startTime) - pauseTotal;
                                             
-                                            console.log("RACE TIME:", raceTotal);
+                                            // console.log("RACE TIME:", raceTotal);
 
-                                            test.send({ raceId: thisRaceId, raceTime: raceTotal, raceMap: "the-map", raceColor: "white" })
+                                            test.send({ raceId: thisRaceId, raceTime: raceTotal, raceMode: "normal" })
                                                 .expect(/race update/)
                                                 .expect(200)
                                                 .end((err, res) =>
