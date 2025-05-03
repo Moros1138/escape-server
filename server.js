@@ -27,9 +27,8 @@ const sessions = new Database("sessions.db", { verbose: console.log });
 
 races.exec(`CREATE TABLE IF NOT EXISTS 'races' (
     'id' INTEGER PRIMARY KEY AUTOINCREMENT,
-    'color' TEXT,
     'name' TEXT,
-    'map' TEXT,
+    'mode' TEXT,
     'time' INTEGER,
     'created_at' TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )`);
