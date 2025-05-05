@@ -402,7 +402,7 @@ export default function defineApi(app, races)
                 .set("Content-Type", "application/json")
                 .send({
                     result: "ok",
-                    message: "race paused"
+                    message: "race unpaused"
                 });
     
         });
