@@ -1,0 +1,21 @@
+services:
+  npm-install:
+    image: node:20
+    command: npm install
+    volumes:
+      - ./:/app
+    working_dir: /app
+    # Ensures this service runs to completion
+    restart: no
+
+  server:
+    image: node:20
+    command: npm run dev
+    volumes:
+      - ./:/app
+    working_dir: /app
+    ports:
+      - "3000:3000"
+    depends_on:
+      npm-install:
+        condition: service_completed_successfully
