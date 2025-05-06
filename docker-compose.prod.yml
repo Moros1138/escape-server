@@ -1,21 +1,22 @@
 services:
-  npm-install:
+  escape.installer:
     image: node:20
     command: npm install
     volumes:
       - ./:/app
     working_dir: /app
-    # Ensures this service runs to completion
+    user: "${UID:-1000}:${GID:-1000}"
     restart: no
 
-  server:
+  escape.server:
     image: node:20
-    command: npm run dev
+    command: npm run start
     volumes:
       - ./:/app
     working_dir: /app
+    user: "${UID:-1000}:${GID:-1000}"
     ports:
       - "3000:3000"
     depends_on:
-      npm-install:
+      escape.installer:
         condition: service_completed_successfully
