@@ -6,6 +6,7 @@ import express from 'express';
 import morgan from 'morgan';
 import { dirname,join } from "path";
 import { fileURLToPath } from 'url';
+import { existsSync } from 'fs';
 
 const __dirname       = dirname(fileURLToPath(import.meta.url));
 const port            = process.env.PORT || "3000";
@@ -22,6 +23,7 @@ const app = express();
 
 const SqliteStore = store(session);
 
+const dbExists = (existsSync("races.db"));
 const races = new Database("races.db", { verbose: console.log });
 const sessions = new Database("sessions.db", { verbose: console.log });
 
@@ -32,6 +34,16 @@ races.exec(`CREATE TABLE IF NOT EXISTS 'races' (
     'time' INTEGER,
     'created_at' TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )`);
+
+if(!dbExists)
+{
+    let stmt = races.prepare("INSERT INTO `races` (`name`, `mode`, `time`) VALUES (@name, @mode, @time);");
+    for(let i = 0; i < 10; i++)
+    {
+        stmt.run({ name: "ALEXIO", mode: "normal", time: 5999999 });
+        stmt.run({ name: "ALEXIO", mode: "encore", time: 5999999 });
+    }
+}
 
 app.use(morgan("tiny"));
 
