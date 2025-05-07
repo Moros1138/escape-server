@@ -173,6 +173,232 @@ describe("ENDPOINT /session", () =>
 
 }); // ENDPOINT /session
 
+describe("ENDPOINT /counters/(normal|encore) - cookie not set", () =>
+{
+
+    describe(`GET /counters`, () =>
+    {
+        it("should respond with json", (done) =>
+        {
+            const test = request(app).get(`/counters`);
+            
+            test.expect("Content-Type", /json/)
+                .end((err, res) =>
+                {
+                    done(err);
+                });
+        });
+        
+        it("should respond with code 401", (done) =>
+        {
+            const test = request(app).get(`/counters`);
+            
+            test.expect(401)
+                .end((err, res) =>
+                {
+                    done(err);
+                });
+        });
+    
+        it("should respond with `unauthorized` in body", (done) =>
+        {
+            const test = request(app).get(`/counters`);
+            
+            test.expect(/unauthorized/)
+                .end((err, res) =>
+                {
+                    done(err);
+                });
+        });
+    });
+    
+    ['normal', 'encore'].forEach((mode) =>
+    {
+        describe(`GET /counters/${mode}`, () =>
+        {
+            it("should respond with json", (done) =>
+            {
+                const test = request(app).get(`/counters/${mode}`);
+                
+                test.expect("Content-Type", /json/)
+                    .end((err, res) =>
+                    {
+                        done(err);
+                    });
+            });
+            
+            it("should respond with code 401", (done) =>
+            {
+                const test = request(app).get(`/counters/${mode}`);
+                
+                test.expect(401)
+                    .end((err, res) =>
+                    {
+                        done(err);
+                    });
+            });
+        
+            it("should respond with `unauthorized` in body", (done) =>
+            {
+                const test = request(app).get(`/counters/${mode}`);
+                
+                test.expect(/unauthorized/)
+                    .end((err, res) =>
+                    {
+                        done(err);
+                    });
+            });
+        });
+    
+        describe(`POST /counters/${mode}`, () =>
+        {
+            it("should respond with json", (done) =>
+            {
+                const test = request(app).post(`/counters/${mode}`);
+                
+                test.expect("Content-Type", /json/)
+                    .end((err, res) =>
+                    {
+                        done(err);
+                    });
+            });
+            
+            it("should respond with code 401", (done) =>
+            {
+                const test = request(app).post(`/counters/${mode}`);
+                
+                test.expect(401)
+                    .end((err, res) =>
+                    {
+                        done(err);
+                    });
+            });
+        
+            it("should respond with `unauthorized` in body", (done) =>
+            {
+                const test = request(app).post(`/counters/${mode}`);
+                
+                test.expect(/unauthorized/)
+                    .end((err, res) =>
+                    {
+                        done(err);
+                    });
+            });
+        });
+    }); // normal,encore
+});
+
+describe("ENDPOINT /counters/(normal|encore) - cookie set", () =>
+{
+    describe(`GET /counters`, () =>
+    {
+        it("should respond with json", (done) =>
+        {
+            const test = request(app).get(`/counters`);
+            
+            test.cookies = sessionCookie;
+            test.expect(200)
+                .end((err, res) =>
+                {
+                    done(err);
+                });
+        });
+    
+        it("should respond with 2 results in body", (done) =>
+        {
+            const test = request(app).get(`/counters`);
+            
+            test.cookies = sessionCookie;
+            test.expect((res) =>
+            {
+                if(res.body.results.length != 2)
+                    throw new Error(`expected results.length to be equal to 2, got ${res.body.results.length}`);
+            })
+                .end((err, res) =>
+                {
+                    done(err);
+                });
+
+        });
+    });
+
+
+    ['normal', 'encore'].forEach((mode) =>
+    {
+        describe(`GET /counters/${mode}`, () =>
+        {
+            it("should respond with json", (done) =>
+            {
+                const test = request(app).get(`/counters/${mode}`);
+                
+                test.cookies = sessionCookie;
+                test.expect(200)
+                    .end((err, res) =>
+                    {
+                        done(err);
+                    });
+            });
+        
+            it("should respond with `count` in body", (done) =>
+            {
+                const test = request(app).get(`/counters/${mode}`);
+                
+                test.cookies = sessionCookie;
+                test.expect(/count/)
+                    .end((err, res) =>
+                    {
+                        done(err);
+                    });
+
+            });
+        });
+
+        describe(`POST /counters/${mode}`, () =>
+        {
+            it("should respond with json", (done) =>
+            {
+                const test = request(app).post(`/counters/${mode}`);
+                
+                test.cookies = sessionCookie;
+                test.expect(200)
+                    .end((err, res) =>
+                    {
+                        done(err);
+                    });
+            });
+        
+            it("should respond with `count` in body", (done) =>
+            {
+                const test = request(app).post(`/counters/${mode}`);
+                
+                test.cookies = sessionCookie;
+                test.expect(/count/)
+                    .end((err, res) =>
+                    {
+                        done(err);
+                    });
+            });
+
+            it("should respond with a count of 3", (done) =>
+            {
+                const test = request(app)
+                    .post(`/counters/${mode}`)
+                    .set('Cookie', sessionCookie)
+                    .expect(200)
+                    .expect((res) =>
+                    {
+                        if(res.body.count !== 3)
+                            throw new Error(`Expected count to be 3, but got ${res.body.count}`);
+                    })
+                    .end((err, res) =>
+                    {
+                        done(err);
+                    });
+            });
+        });
+    }); // normal,encore
+});
+
 describe("ENDPOINT /race - cookie not set", () =>
 {
     describe("POST /race", () =>
@@ -709,7 +935,7 @@ describe("GET /race", () =>
             })
     });
 
-    it("should respond with 0 results when a map does not exist", (done) =>
+    it("should respond with 0 results when a mode does not exist", (done) =>
     {
         const test = request(app).get("/race?mode=mode-not-exist");
         

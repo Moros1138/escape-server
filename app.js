@@ -162,7 +162,168 @@ export default function defineApi(app, races)
             });
     
     });
+    
+    app.get('/counters', (request, response) =>
+    {
+        if(!request.session.userId)
+        {
+            response
+                .set("Content-Type", "application/json")
+                .status(401)
+                .send({
+                    result: 'fail',
+                    message: 'unauthorized'
+                });
+    
+            return;
+        }
 
+        let results = null;
+        try
+        {
+            const stmt = races.prepare(`SELECT * FROM counters;`);
+            results = stmt.all();
+        }
+        catch(e)
+        {
+            response.status(200)
+                .set("Content-Type", "application/json")
+                .send({
+                    result: "fail",
+                    params: params,
+                    message: "server error. contact admin"
+                });
+
+            return;
+        }
+
+        response.status(200)
+            .set("Content-Type", "application/json")
+            .send({
+                result: "ok",
+                params: request.params,
+                results: results
+            });
+
+    
+    });
+
+    app.get('/counters/:mode', (request, response) =>
+    {
+        if(!request.session.userId)
+        {
+            response
+                .set("Content-Type", "application/json")
+                .status(401)
+                .send({
+                    result: 'fail',
+                    message: 'unauthorized'
+                });
+    
+            return;
+        }
+
+        let results = null;
+        try
+        {
+            const stmt = races.prepare(`
+                SELECT * FROM counters
+                WHERE mode = ?;
+            `);
+            
+            results = stmt.get(request.params.mode);
+        }
+        catch(e)
+        {
+            response.status(200)
+                .set("Content-Type", "application/json")
+                .send({
+                    result: "fail",
+                    params: params,
+                    message: "server error. contact admin"
+                });
+
+            return;
+        }
+
+        response.status(200)
+            .set("Content-Type", "application/json")
+            .send({
+                result: "ok",
+                params: request.params,
+                count: results.count
+            });
+        
+    });
+
+    app.post('/counters/:mode', (request, response) =>
+    {
+        if(!request.session.userId)
+        {
+            response
+                .set("Content-Type", "application/json")
+                .status(401)
+                .send({
+                    result: 'fail',
+                    message: 'unauthorized'
+                });
+    
+            return;
+        }
+
+        try
+        {
+            const stmt = races.prepare(`
+                UPDATE counters SET count = count + 1 WHERE mode = ?;
+            `);
+            
+            stmt.run(request.params.mode);
+        }
+        catch(e)
+        {
+            response.status(404)
+                .set("Content-Type", "application/json")
+                .send({
+                    result: "fail",
+                    params: request.params,
+                    message: "server error. contact admin",
+                });
+
+            return;
+        }
+        
+        let results = null;
+        try
+        {
+            const stmt = races.prepare(`
+                SELECT * FROM counters
+                WHERE mode = ?;
+            `);
+            
+            results = stmt.get(request.params.mode);
+        }
+        catch(e)
+        {
+            response.status(200)
+                .set("Content-Type", "application/json")
+                .send({
+                    result: "fail",
+                    params: request.params,
+                    message: "server error. contact admin"
+                });
+
+            return;
+        }
+
+        response.status(200)
+            .set("Content-Type", "application/json")
+            .send({
+                result: "ok",
+                params: request.params,
+                count: results.count
+            });
+    });
+    
     app.get('/race', (request, response) =>
     {
         const params = {
