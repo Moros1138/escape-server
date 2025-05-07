@@ -40,8 +40,8 @@ if(!dbExists)
     let stmt = races.prepare("INSERT INTO `races` (`name`, `mode`, `time`) VALUES (@name, @mode, @time);");
     for(let i = 0; i < 10; i++)
     {
-        stmt.run({ name: "ALEXIO", mode: "normal", time: 5999999 });
-        stmt.run({ name: "ALEXIO", mode: "encore", time: 5999999 });
+        stmt.run({ name: "MACHINE", mode: "normal", time: 5999999 });
+        stmt.run({ name: "MACHINE", mode: "encore", time: 5999999 });
     }
 }
 
