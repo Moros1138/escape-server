@@ -20,6 +20,14 @@ races.exec(`CREATE TABLE IF NOT EXISTS 'races' (
     'created_at' TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )`);
 
+races.exec(`CREATE TABLE IF NOT EXISTS 'counters' (
+    'mode' TEXT,
+    'count' INTEGER
+)`);
+
+races.exec(`INSERT INTO counters (mode, count) VALUES ('normal', 0);`);
+races.exec(`INSERT INTO counters (mode, count) VALUES ('encore', 0);`);
+
 const app = express();
 
 app.use(express.json());
