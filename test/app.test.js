@@ -25,8 +25,10 @@ races.exec(`CREATE TABLE IF NOT EXISTS 'counters' (
     'count' INTEGER
 )`);
 
-races.exec(`INSERT INTO counters (mode, count) VALUES ('normal', 0);`);
-races.exec(`INSERT INTO counters (mode, count) VALUES ('encore', 0);`);
+races.exec(`INSERT INTO counters (mode, count) VALUES ('normal-main', 0);`);
+races.exec(`INSERT INTO counters (mode, count) VALUES ('encore-main', 0);`);
+races.exec(`INSERT INTO counters (mode, count) VALUES ('normal-survival', 0);`);
+races.exec(`INSERT INTO counters (mode, count) VALUES ('encore-survival', 0);`);
 
 const app = express();
 
@@ -212,7 +214,7 @@ describe("ENDPOINT /api/counters/(normal|encore) - cookie not set", () =>
         });
     });
     
-    ['normal', 'encore'].forEach((mode) =>
+    ['normal-main', 'encore-main', 'normal-survival','encore-survival',].forEach((mode) =>
     {
         describe(`GET /api/counters/${mode}`, () =>
         {
@@ -304,26 +306,33 @@ describe("ENDPOINT /api/counters/(normal|encore) - cookie set", () =>
                 });
         });
     
-        it("should respond with 2 results in body", (done) =>
+        it("should respond with 4 results in body", (done) =>
         {
             const test = request(app).get(`/api/counters`);
             
             test.cookies = sessionCookie;
-            test.expect((res) =>
-            {
-                if(res.body.results.length != 2)
-                    throw new Error(`expected results.length to be equal to 2, got ${res.body.results.length}`);
-            })
+            test.expect(200)
                 .end((err, res) =>
                 {
-                    done(err);
+                    if(err)
+                    {
+                        done(err);
+                        return;
+                    }
+
+                    if(res.body.results.length != 4)
+                    {
+                        done(new Error(`epxected 4 reults but got ${res.body.results.length}`))
+                        return;
+                    }
+                    
+                    done();
                 });
 
         });
     });
 
-
-    ['normal', 'encore'].forEach((mode) =>
+    ['normal-main', 'encore-main', 'normal-survival','encore-survival'].forEach((mode) =>
     {
         describe(`GET /api/counters/${mode}`, () =>
         {

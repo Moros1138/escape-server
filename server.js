@@ -42,8 +42,10 @@ races.exec(`CREATE TABLE IF NOT EXISTS 'counters' (
 
 if(!dbExists)
 {
-    races.exec(`INSERT INTO counters (mode, count) VALUES ('normal', 0);`);
-    races.exec(`INSERT INTO counters (mode, count) VALUES ('encore', 0);`);
+    races.exec(`INSERT INTO counters (mode, count) VALUES ('normal-main', 0);`);
+    races.exec(`INSERT INTO counters (mode, count) VALUES ('encore-main', 0);`);
+    races.exec(`INSERT INTO counters (mode, count) VALUES ('normal-survival', 0);`);
+    races.exec(`INSERT INTO counters (mode, count) VALUES ('encore-survival', 0);`);
     
     let stmt = races.prepare("INSERT INTO `races` (`name`, `mode`, `time`) VALUES (@name, @mode, @time);");
     for(let i = 0; i < 10; i++)
