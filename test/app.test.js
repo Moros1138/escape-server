@@ -54,13 +54,13 @@ function isSortedDescending(arr) {
     return arr.every((value, index) => value === sortedArray[index]);
 }
 
-describe("ENDPOINT /session", () =>
+describe("ENDPOINT /api/session", () =>
 {
-    describe("GET /session - cookie not set", () =>
+    describe("GET /api/session - cookie not set", () =>
     {
         it("should respond with code 404", (done) =>
         {
-            const test = request(app).get("/session");
+            const test = request(app).get("/api/session");
             
             test.expect(404)
                 .end((err, res) =>
@@ -71,7 +71,7 @@ describe("ENDPOINT /session", () =>
 
         it("should respond with json", (done) =>
         {
-            const test = request(app).get("/session");
+            const test = request(app).get("/api/session");
             
             test.expect("Content-Type", /json/)
                 .end((err, res) =>
@@ -82,7 +82,7 @@ describe("ENDPOINT /session", () =>
     
         it("should respond with `session not found` in body", (done) =>
         {
-            const test = request(app).get("/session");
+            const test = request(app).get("/api/session");
             
             test.expect(/session not found/)
                 .end((err, res) =>
@@ -90,13 +90,13 @@ describe("ENDPOINT /session", () =>
                     done(err);
                 });
         });
-    }); // GET /session
+    }); // GET /api/session
     
-    describe("POST /session", () =>
+    describe("POST /api/session", () =>
     {
         it("should respond with code 200", (done) =>
         {
-            const test = request(app).post("/session");
+            const test = request(app).post("/api/session");
 
             test.expect(200)
                 .end((err, res) =>
@@ -107,7 +107,7 @@ describe("ENDPOINT /session", () =>
         
         it("should respond with json", (done) =>
         {
-            const test = request(app).post("/session");
+            const test = request(app).post("/api/session");
 
             test.expect('Content-Type', /json/)
                 .end((err, res) =>
@@ -118,7 +118,7 @@ describe("ENDPOINT /session", () =>
         
         it("should set cookie", (done) =>
         {
-            const test = request(app).post("/session");
+            const test = request(app).post("/api/session");
 
             test.expect("set-cookie", /sessionid/)
                 .end((err, res) =>
@@ -127,13 +127,13 @@ describe("ENDPOINT /session", () =>
                     done(err);
                 });
         });
-    }); // POST /session
+    }); // POST /api/session
     
-    describe("GET /session - with cookie set", () =>
+    describe("GET /api/session - with cookie set", () =>
     {
         it("should respond with code 200", (done) =>
         {
-            const test = request(app).get("/session");
+            const test = request(app).get("/api/session");
             
             test.cookies = sessionCookie;
             
@@ -146,7 +146,7 @@ describe("ENDPOINT /session", () =>
 
         it("should respond with json", (done) =>
         {
-            const test = request(app).get("/session");
+            const test = request(app).get("/api/session");
             
             test.cookies = sessionCookie;
 
@@ -159,7 +159,7 @@ describe("ENDPOINT /session", () =>
     
         it("should respond with `session exists` in body", (done) =>
         {
-            const test = request(app).get("/session");
+            const test = request(app).get("/api/session");
             
             test.cookies = sessionCookie;
 
@@ -173,14 +173,14 @@ describe("ENDPOINT /session", () =>
 
 }); // ENDPOINT /session
 
-describe("ENDPOINT /counters/(normal|encore) - cookie not set", () =>
+describe("ENDPOINT /api/counters/(normal|encore) - cookie not set", () =>
 {
 
-    describe(`GET /counters`, () =>
+    describe(`GET /api/counters`, () =>
     {
         it("should respond with json", (done) =>
         {
-            const test = request(app).get(`/counters`);
+            const test = request(app).get(`/api/counters`);
             
             test.expect("Content-Type", /json/)
                 .end((err, res) =>
@@ -191,7 +191,7 @@ describe("ENDPOINT /counters/(normal|encore) - cookie not set", () =>
         
         it("should respond with code 401", (done) =>
         {
-            const test = request(app).get(`/counters`);
+            const test = request(app).get(`/api/counters`);
             
             test.expect(401)
                 .end((err, res) =>
@@ -202,7 +202,7 @@ describe("ENDPOINT /counters/(normal|encore) - cookie not set", () =>
     
         it("should respond with `unauthorized` in body", (done) =>
         {
-            const test = request(app).get(`/counters`);
+            const test = request(app).get(`/api/counters`);
             
             test.expect(/unauthorized/)
                 .end((err, res) =>
@@ -214,11 +214,11 @@ describe("ENDPOINT /counters/(normal|encore) - cookie not set", () =>
     
     ['normal', 'encore'].forEach((mode) =>
     {
-        describe(`GET /counters/${mode}`, () =>
+        describe(`GET /api/counters/${mode}`, () =>
         {
             it("should respond with json", (done) =>
             {
-                const test = request(app).get(`/counters/${mode}`);
+                const test = request(app).get(`/api/counters/${mode}`);
                 
                 test.expect("Content-Type", /json/)
                     .end((err, res) =>
@@ -229,7 +229,7 @@ describe("ENDPOINT /counters/(normal|encore) - cookie not set", () =>
             
             it("should respond with code 401", (done) =>
             {
-                const test = request(app).get(`/counters/${mode}`);
+                const test = request(app).get(`/api/counters/${mode}`);
                 
                 test.expect(401)
                     .end((err, res) =>
@@ -240,7 +240,7 @@ describe("ENDPOINT /counters/(normal|encore) - cookie not set", () =>
         
             it("should respond with `unauthorized` in body", (done) =>
             {
-                const test = request(app).get(`/counters/${mode}`);
+                const test = request(app).get(`/api/counters/${mode}`);
                 
                 test.expect(/unauthorized/)
                     .end((err, res) =>
@@ -250,11 +250,11 @@ describe("ENDPOINT /counters/(normal|encore) - cookie not set", () =>
             });
         });
     
-        describe(`POST /counters/${mode}`, () =>
+        describe(`POST /api/counters/${mode}`, () =>
         {
             it("should respond with json", (done) =>
             {
-                const test = request(app).post(`/counters/${mode}`);
+                const test = request(app).post(`/api/counters/${mode}`);
                 
                 test.expect("Content-Type", /json/)
                     .end((err, res) =>
@@ -265,7 +265,7 @@ describe("ENDPOINT /counters/(normal|encore) - cookie not set", () =>
             
             it("should respond with code 401", (done) =>
             {
-                const test = request(app).post(`/counters/${mode}`);
+                const test = request(app).post(`/api/counters/${mode}`);
                 
                 test.expect(401)
                     .end((err, res) =>
@@ -276,7 +276,7 @@ describe("ENDPOINT /counters/(normal|encore) - cookie not set", () =>
         
             it("should respond with `unauthorized` in body", (done) =>
             {
-                const test = request(app).post(`/counters/${mode}`);
+                const test = request(app).post(`/api/counters/${mode}`);
                 
                 test.expect(/unauthorized/)
                     .end((err, res) =>
@@ -288,13 +288,13 @@ describe("ENDPOINT /counters/(normal|encore) - cookie not set", () =>
     }); // normal,encore
 });
 
-describe("ENDPOINT /counters/(normal|encore) - cookie set", () =>
+describe("ENDPOINT /api/counters/(normal|encore) - cookie set", () =>
 {
-    describe(`GET /counters`, () =>
+    describe(`GET /api/counters`, () =>
     {
         it("should respond with json", (done) =>
         {
-            const test = request(app).get(`/counters`);
+            const test = request(app).get(`/api/counters`);
             
             test.cookies = sessionCookie;
             test.expect(200)
@@ -306,7 +306,7 @@ describe("ENDPOINT /counters/(normal|encore) - cookie set", () =>
     
         it("should respond with 2 results in body", (done) =>
         {
-            const test = request(app).get(`/counters`);
+            const test = request(app).get(`/api/counters`);
             
             test.cookies = sessionCookie;
             test.expect((res) =>
@@ -325,11 +325,11 @@ describe("ENDPOINT /counters/(normal|encore) - cookie set", () =>
 
     ['normal', 'encore'].forEach((mode) =>
     {
-        describe(`GET /counters/${mode}`, () =>
+        describe(`GET /api/counters/${mode}`, () =>
         {
             it("should respond with json", (done) =>
             {
-                const test = request(app).get(`/counters/${mode}`);
+                const test = request(app).get(`/api/counters/${mode}`);
                 
                 test.cookies = sessionCookie;
                 test.expect(200)
@@ -341,7 +341,7 @@ describe("ENDPOINT /counters/(normal|encore) - cookie set", () =>
         
             it("should respond with `count` in body", (done) =>
             {
-                const test = request(app).get(`/counters/${mode}`);
+                const test = request(app).get(`/api/counters/${mode}`);
                 
                 test.cookies = sessionCookie;
                 test.expect(/count/)
@@ -353,11 +353,11 @@ describe("ENDPOINT /counters/(normal|encore) - cookie set", () =>
             });
         });
 
-        describe(`POST /counters/${mode}`, () =>
+        describe(`POST /api/counters/${mode}`, () =>
         {
             it("should respond with json", (done) =>
             {
-                const test = request(app).post(`/counters/${mode}`);
+                const test = request(app).post(`/api/counters/${mode}`);
                 
                 test.cookies = sessionCookie;
                 test.expect(200)
@@ -369,7 +369,7 @@ describe("ENDPOINT /counters/(normal|encore) - cookie set", () =>
         
             it("should respond with `count` in body", (done) =>
             {
-                const test = request(app).post(`/counters/${mode}`);
+                const test = request(app).post(`/api/counters/${mode}`);
                 
                 test.cookies = sessionCookie;
                 test.expect(/count/)
@@ -382,7 +382,7 @@ describe("ENDPOINT /counters/(normal|encore) - cookie set", () =>
             it("should respond with a count of 3", (done) =>
             {
                 const test = request(app)
-                    .post(`/counters/${mode}`)
+                    .post(`/api/counters/${mode}`)
                     .set('Cookie', sessionCookie)
                     .expect(200)
                     .expect((res) =>
@@ -399,13 +399,13 @@ describe("ENDPOINT /counters/(normal|encore) - cookie set", () =>
     }); // normal,encore
 });
 
-describe("ENDPOINT /race - cookie not set", () =>
+describe("ENDPOINT /api/race - cookie not set", () =>
 {
-    describe("POST /race", () =>
+    describe("POST /api/race", () =>
     {
         it("should respond with json", (done) =>
         {
-            const test = request(app).post("/race");
+            const test = request(app).post("/api/race");
             
             test.expect("Content-Type", /json/)
                 .end((err, res) =>
@@ -416,7 +416,7 @@ describe("ENDPOINT /race - cookie not set", () =>
     
         it("should respond with code 401", (done) =>
         {
-            const test = request(app).post("/race");
+            const test = request(app).post("/api/race");
             
             test.expect(401)
                 .end((err, res) =>
@@ -427,7 +427,7 @@ describe("ENDPOINT /race - cookie not set", () =>
 
         it("should respond with `unauthorized` in body", (done) =>
         {
-            const test = request(app).post("/race");
+            const test = request(app).post("/api/race");
             
             test.expect(/unauthorized/)
                 .end((err, res) =>
@@ -438,11 +438,11 @@ describe("ENDPOINT /race - cookie not set", () =>
     }); // POST /race
     
 
-    describe("PATCH /race", () =>
+    describe("PATCH /api/race", () =>
     {
         it("should respond with json", (done) =>
         {
-            const test = request(app).patch("/race");
+            const test = request(app).patch("/api/race");
             
             test.expect("Content-Type", /json/)
                 .end((err, res) =>
@@ -453,7 +453,7 @@ describe("ENDPOINT /race - cookie not set", () =>
     
         it("should respond with code 401", (done) =>
         {
-            const test = request(app).patch("/race");
+            const test = request(app).patch("/api/race");
             
             test.expect(401)
                 .end((err, res) =>
@@ -464,7 +464,7 @@ describe("ENDPOINT /race - cookie not set", () =>
 
         it("should respond with `unauthorized` in body", (done) =>
         {
-            const test = request(app).patch("/race");
+            const test = request(app).patch("/api/race");
             
             test.expect(/unauthorized/)
                 .end((err, res) =>
@@ -478,7 +478,7 @@ describe("ENDPOINT /race - cookie not set", () =>
     {
         it("should respond with json", (done) =>
         {
-            const test = request(app).delete("/race");
+            const test = request(app).delete("/api/race");
             
             test.expect("Content-Type", /json/)
                 .end((err, res) =>
@@ -489,7 +489,7 @@ describe("ENDPOINT /race - cookie not set", () =>
 
         it("should respond with code 401", (done) =>
         {
-            const test = request(app).delete("/race");
+            const test = request(app).delete("/api/race");
             
             test.expect(401)
                 .end((err, res) =>
@@ -500,7 +500,7 @@ describe("ENDPOINT /race - cookie not set", () =>
     
         it("should respond with `unauthorized` in body", (done) =>
         {
-            const test = request(app).delete("/race");
+            const test = request(app).delete("/api/race");
             
             test.expect(/unauthorized/)
                 .end((err, res) =>
@@ -512,13 +512,13 @@ describe("ENDPOINT /race - cookie not set", () =>
 
 }); // ENDPOINT /race - cookie not set
 
-describe("ENDPOINT /race - with cookie set", () =>
+describe("ENDPOINT /api/race - with cookie set", () =>
 {
-    describe("POST /race", () =>
+    describe("POST /api/race", () =>
     {
         it("should respond with json", (done) =>
         {
-            const test = request(app).post("/race");
+            const test = request(app).post("/api/race");
             
             test.cookies = sessionCookie;
 
@@ -531,7 +531,7 @@ describe("ENDPOINT /race - with cookie set", () =>
     
         it("should respond with code 200", (done) =>
         {
-            const test = request(app).post("/race");
+            const test = request(app).post("/api/race");
             
             test.cookies = sessionCookie;
             
@@ -544,7 +544,7 @@ describe("ENDPOINT /race - with cookie set", () =>
 
         it("should respond with `race started` in body", (done) =>
         {
-            const test = request(app).post("/race");
+            const test = request(app).post("/api/race");
             
             test.cookies = sessionCookie;
 
@@ -557,11 +557,11 @@ describe("ENDPOINT /race - with cookie set", () =>
         });
     }); // POST /race
 
-    describe("PATCH /race - missing parameters", () =>
+    describe("PATCH /api/race - missing parameters", () =>
     {
         it("should respond with json", (done) =>
         {
-            const test = request(app).patch("/race");
+            const test = request(app).patch("/api/race");
             
             test.cookies = sessionCookie;
 
@@ -574,7 +574,7 @@ describe("ENDPOINT /race - with cookie set", () =>
     
         it("should respond with code 400", (done) =>
         {
-            const test = request(app).patch("/race");
+            const test = request(app).patch("/api/race");
             
             test.cookies = sessionCookie;
 
@@ -587,7 +587,7 @@ describe("ENDPOINT /race - with cookie set", () =>
         
         it("should respond with `required parameter (.*) missing`", (done) =>
         {
-            const test = request(app).patch("/race");
+            const test = request(app).patch("/api/race");
             
             test.cookies = sessionCookie;
             
@@ -601,11 +601,11 @@ describe("ENDPOINT /race - with cookie set", () =>
     }); // PATCH /race - missing parameters
 
 
-    describe("PATCH /race - with parameters", () =>
+    describe("PATCH /api/race - with parameters", () =>
     {
         it("should respond with json", (done) =>
         {
-            const test = request(app).patch("/race");
+            const test = request(app).patch("/api/race");
             
             test.cookies = sessionCookie;
 
@@ -619,13 +619,13 @@ describe("ENDPOINT /race - with cookie set", () =>
 
         it("should respond with code 200 - finish race", (done) =>
         {
-            const getRaceTime = request(app).post("/race");
+            const getRaceTime = request(app).post("/api/race");
             getRaceTime.cookies = sessionCookie;
             getRaceTime.end((err, req) =>
             {
                 raceId = req.body.raceId;
 
-                const test = request(app).patch("/race");
+                const test = request(app).patch("/api/race");
             
                 test.cookies = sessionCookie;
                 
@@ -640,13 +640,13 @@ describe("ENDPOINT /race - with cookie set", () =>
         
         it("should accept times 1000ms difference - finish race", (done) =>
         {
-            const getRaceTime = request(app).post("/race");
+            const getRaceTime = request(app).post("/api/race");
             getRaceTime.cookies = sessionCookie;
             getRaceTime.end((err, req) =>
             {
                 raceId = req.body.raceId;
 
-                const test = request(app).patch("/race");
+                const test = request(app).patch("/api/race");
             
                 test.cookies = sessionCookie;
                 
@@ -662,7 +662,7 @@ describe("ENDPOINT /race - with cookie set", () =>
     
         it("should reject times 2000ms difference", (done) =>
         {
-            const getRaceTime = request(app).post("/race");
+            const getRaceTime = request(app).post("/api/race");
             
             getRaceTime.cookies = sessionCookie;
             
@@ -670,7 +670,7 @@ describe("ENDPOINT /race - with cookie set", () =>
             {
                 raceId = req.body.raceId;
                 
-                const test = request(app).patch("/race");
+                const test = request(app).patch("/api/race");
             
                 test.cookies = sessionCookie;
                 
@@ -686,11 +686,11 @@ describe("ENDPOINT /race - with cookie set", () =>
     
     }); // PATCH /race - with parameters
 
-    describe("DELETE /race - missing parameters", () =>
+    describe("DELETE /api/race - missing parameters", () =>
     {
         it("should respond with json", (done) =>
         {
-            const test = request(app).delete("/race");
+            const test = request(app).delete("/api/race");
             
             test.cookies = sessionCookie;
 
@@ -703,7 +703,7 @@ describe("ENDPOINT /race - with cookie set", () =>
 
         it("should respond with `required parameter (.*) missing`", (done) =>
         {
-            const test = request(app).delete("/race");
+            const test = request(app).delete("/api/race");
             
             test.cookies = sessionCookie;
             
@@ -716,11 +716,11 @@ describe("ENDPOINT /race - with cookie set", () =>
 
     }); // DELETE /race - missing parameters
 
-    describe("DELETE /race - with parameters", () =>
+    describe("DELETE /api/race - with parameters", () =>
     {
         it("should respond with json", (done) =>
         {
-            const test = request(app).delete("/race");
+            const test = request(app).delete("/api/race");
             
             test.cookies = sessionCookie;
 
@@ -733,7 +733,7 @@ describe("ENDPOINT /race - with cookie set", () =>
 
         it("should respond with code 404 when raceId mismatch", (done) =>
         {
-            const test = request(app).delete("/race");
+            const test = request(app).delete("/api/race");
             
             test.cookies = sessionCookie;
             
@@ -747,13 +747,13 @@ describe("ENDPOINT /race - with cookie set", () =>
         
         it("should respond with code 200", (done) =>
         {
-            const getRaceTime = request(app).post("/race");
+            const getRaceTime = request(app).post("/api/race");
             getRaceTime.cookies = sessionCookie;
             getRaceTime.end((err, req) =>
             {
                 raceId = req.body.raceId;
 
-                const test = request(app).delete("/race");
+                const test = request(app).delete("/api/race");
             
                 test.cookies = sessionCookie;
             
@@ -770,13 +770,13 @@ describe("ENDPOINT /race - with cookie set", () =>
 
 }); // ENDPOINT /race - with cookie set
 
-describe("ENDPOINT /name - cookie not set", () =>
+describe("ENDPOINT /api/name - cookie not set", () =>
 {
-    describe("POST /name", () =>
+    describe("POST /api/name", () =>
     {
         it("should respond with json", (done) =>
         {
-            const test = request(app).post("/name");
+            const test = request(app).post("/api/name");
             
             test.expect("Content-Type", /json/)
                 .end((err, res) =>
@@ -787,7 +787,7 @@ describe("ENDPOINT /name - cookie not set", () =>
 
         it("should respond with code 401", (done) =>
         {
-            const test = request(app).post("/name");
+            const test = request(app).post("/api/name");
             
             test.expect(401)
                 .end((err, res) =>
@@ -798,7 +798,7 @@ describe("ENDPOINT /name - cookie not set", () =>
 
         it("should respond with `unauthorized` in body", (done) =>
         {
-            const test = request(app).post("/name");
+            const test = request(app).post("/api/name");
             
             test.expect(/unauthorized/)
                 .end((err, res) =>
@@ -809,14 +809,14 @@ describe("ENDPOINT /name - cookie not set", () =>
     });
 });
 
-describe("ENDPOINT /name - with cookie set", () =>
+describe("ENDPOINT /api/name - with cookie set", () =>
 {
-    describe("POST /name", () =>
+    describe("POST /api/name", () =>
     {
     
         it("should respond with json", (done) =>
         {
-            const test = request(app).post("/name");
+            const test = request(app).post("/api/name");
             
             test.cookies = sessionCookie;
 
@@ -829,7 +829,7 @@ describe("ENDPOINT /name - with cookie set", () =>
 
         it("should respond with `required parameter (.*) missing`", (done) =>
         {
-            const test = request(app).post("/name");
+            const test = request(app).post("/api/name");
             
             test.cookies = sessionCookie;
             
@@ -842,7 +842,7 @@ describe("ENDPOINT /name - with cookie set", () =>
 
         it("should set name to `Javidx9`", (done) =>
         {
-            const test = request(app).post("/name");
+            const test = request(app).post("/api/name");
             
             test.cookies = sessionCookie;
             
@@ -857,7 +857,7 @@ describe("ENDPOINT /name - with cookie set", () =>
         
         it("should reject bad words for name", (done) =>
         {
-            const test = request(app).post("/name");
+            const test = request(app).post("/api/name");
             
             test.cookies = sessionCookie;
             
@@ -869,9 +869,9 @@ describe("ENDPOINT /name - with cookie set", () =>
                 });
         });
     });
-}); // ENDPOINT /name - with cookie set
+}); // ENDPOINT /api/name - with cookie set
 
-describe("GET /race", () =>
+describe("GET /api/race", () =>
 {
     before(function()
     {
@@ -903,7 +903,7 @@ describe("GET /race", () =>
 
     it("should respond with json", (done) =>
     {
-        const test = request(app).post("/race");
+        const test = request(app).post("/api/race");
         
         test.expect("Content-Type", /json/)
             .end((err, res) =>
@@ -914,7 +914,7 @@ describe("GET /race", () =>
 
     it("should respond with 10 results on a default call", (done) =>
     {
-        const test = request(app).get("/race?mode=normal");
+        const test = request(app).get("/api/race?mode=normal");
         
         test.expect(200)
             .end((err, res) =>
@@ -937,7 +937,7 @@ describe("GET /race", () =>
 
     it("should respond with 0 results when a mode does not exist", (done) =>
     {
-        const test = request(app).get("/race?mode=mode-not-exist");
+        const test = request(app).get("/api/race?mode=mode-not-exist");
         
         test.expect(200)
             .end((err, res) =>
@@ -955,17 +955,12 @@ describe("GET /race", () =>
                 }
                 
                 done();
-                // console.log(res.body.params);
-                // let out = [];
-                // res.body.results.forEach((result) => out.push(result.time));
-                // console.log(out);
-                // done(err);
             })
     });
     
     it("should respond with 10 results sorted by `time` in ascending order", (done) =>
     {
-        const test = request(app).get("/race?mode=normal&sortBy=time&sort=ASC");
+        const test = request(app).get("/api/race?mode=normal&sortBy=time&sort=ASC");
         
         test.expect(200)
             .end((err, res) =>
@@ -997,7 +992,7 @@ describe("GET /race", () =>
     
     it("should respond with 10 results sorted by `time` in descending order", (done) =>
     {
-        const test = request(app).get("/race?mode=normal&sortBy=time&sort=DESC");
+        const test = request(app).get("/api/race?mode=normal&sortBy=time&sort=DESC");
         
         test.expect(200)
             .end((err, res) =>
@@ -1029,7 +1024,7 @@ describe("GET /race", () =>
     
     it("should respond with 5 results when limit is set to 5", (done) =>
     {
-        const test = request(app).get("/race?mode=normal&limit=5");
+        const test = request(app).get("/api/race?mode=normal&limit=5");
         
         test.expect(200)
             .end((err, res) =>
@@ -1052,11 +1047,11 @@ describe("GET /race", () =>
 
     it("should respond with 1 result offset by 0", (done) =>
     {
-        request(app).get("/race?mode=normal&limit=10&offset=0").end((err, res) =>
+        request(app).get("/api/race?mode=normal&limit=10&offset=0").end((err, res) =>
         {
             const baselineResults = res.body.results;
 
-            const test = request(app).get("/race?mode=normal&limit=1&offset=0");
+            const test = request(app).get("/api/race?mode=normal&limit=1&offset=0");
         
             test.expect(200)
                 .end((err, res) =>
@@ -1087,11 +1082,11 @@ describe("GET /race", () =>
     
     it("should respond with 1 result offset by 5", (done) =>
     {
-        request(app).get("/race?mode=normal&limit=10&offset=0").end((err, res) =>
+        request(app).get("/api/race?mode=normal&limit=10&offset=0").end((err, res) =>
         {
             const baselineResults = res.body.results;
 
-            const test = request(app).get("/race?mode=normal&limit=1&offset=5");
+            const test = request(app).get("/api/race?mode=normal&limit=1&offset=5");
         
             test.expect(200)
                 .end((err, res) =>
@@ -1121,13 +1116,13 @@ describe("GET /race", () =>
 }); // GET /race
 
 
-describe("ENDPOINT /pause - cookie not set", () =>
+describe("ENDPOINT /api/pause - cookie not set", () =>
 {
-    describe("POST /pause", () =>
+    describe("POST /api/pause", () =>
     {
         it("should respond with json", (done) =>
         {
-            const test = request(app).post("/pause");
+            const test = request(app).post("/api/pause");
             
             test.expect("Content-Type", /json/)
                 .end((err, res) =>
@@ -1138,7 +1133,7 @@ describe("ENDPOINT /pause - cookie not set", () =>
     
         it("should respond with code 401", (done) =>
         {
-            const test = request(app).post("/pause");
+            const test = request(app).post("/api/pause");
             
             test.expect(401)
                 .end((err, res) =>
@@ -1149,7 +1144,7 @@ describe("ENDPOINT /pause - cookie not set", () =>
 
         it("should respond with `unauthorized` in body", (done) =>
         {
-            const test = request(app).post("/pause");
+            const test = request(app).post("/api/pause");
             
             test.expect(/unauthorized/)
                 .end((err, res) =>
@@ -1159,11 +1154,11 @@ describe("ENDPOINT /pause - cookie not set", () =>
         });
     });
 
-    describe("PATCH /pause", () =>
+    describe("PATCH /api/pause", () =>
     {
         it("should respond with json", (done) =>
         {
-            const test = request(app).patch("/pause");
+            const test = request(app).patch("/api/pause");
             
             test.expect("Content-Type", /json/)
                 .end((err, res) =>
@@ -1174,7 +1169,7 @@ describe("ENDPOINT /pause - cookie not set", () =>
     
         it("should respond with code 401", (done) =>
         {
-            const test = request(app).patch("/pause");
+            const test = request(app).patch("/api/pause");
             
             test.expect(401)
                 .end((err, res) =>
@@ -1185,7 +1180,7 @@ describe("ENDPOINT /pause - cookie not set", () =>
 
         it("should respond with `unauthorized` in body", (done) =>
         {
-            const test = request(app).patch("/pause");
+            const test = request(app).patch("/api/pause");
             
             test.expect(/unauthorized/)
                 .end((err, res) =>
@@ -1197,14 +1192,14 @@ describe("ENDPOINT /pause - cookie not set", () =>
     
 });
 
-describe("ENDPOINT /pause - needs to test during a race!", () =>
+describe("ENDPOINT /api/pause - needs to test during a race!", () =>
 {
 
     it("missing parameters - respond with code 400", function(done)
     {
         this.timeout(10000);
         
-        const startRace = request(app).post("/race");
+        const startRace = request(app).post("/api/race");
         startRace.cookies = sessionCookie;
         startRace.expect(/race started/)
             .end((err, res) =>
@@ -1213,7 +1208,7 @@ describe("ENDPOINT /pause - needs to test during a race!", () =>
                 
                 setTimeout(() =>
                 {
-                    const test = request(app).post("/pause");
+                    const test = request(app).post("/api/pause");
                     test.cookies = sessionCookie;
                     
                     test.expect(400)
@@ -1230,7 +1225,7 @@ describe("ENDPOINT /pause - needs to test during a race!", () =>
     {
         this.timeout(10000);
         
-        const startRace = request(app).post("/race");
+        const startRace = request(app).post("/api/race");
         startRace.cookies = sessionCookie;
         startRace.expect(/race started/)
             .end((err, res) =>
@@ -1239,7 +1234,7 @@ describe("ENDPOINT /pause - needs to test during a race!", () =>
                 
                 setTimeout(() =>
                 {
-                    const test = request(app).post("/pause");
+                    const test = request(app).post("/api/pause");
                     test.cookies = sessionCookie;
                     
                     test.send({ raceId: "does-not-exist" })
@@ -1257,7 +1252,7 @@ describe("ENDPOINT /pause - needs to test during a race!", () =>
     {
         this.timeout(10000);
         
-        const startRace = request(app).post("/race");
+        const startRace = request(app).post("/api/race");
         startRace.cookies = sessionCookie;
         startRace.expect(/race started/)
             .end((err, res) =>
@@ -1271,7 +1266,7 @@ describe("ENDPOINT /pause - needs to test during a race!", () =>
                 
                 setTimeout(() =>
                 {
-                    const test = request(app).post("/pause");
+                    const test = request(app).post("/api/pause");
                     test.cookies = sessionCookie;
                     
                     test.send({ raceId: thisRaceId })
@@ -1289,7 +1284,7 @@ describe("ENDPOINT /pause - needs to test during a race!", () =>
     {
         this.timeout(10000);
         
-        const startRace = request(app).post("/race");
+        const startRace = request(app).post("/api/race");
         startRace.cookies = sessionCookie;
         startRace.expect(/race started/)
             .end((err, res) =>
@@ -1304,7 +1299,7 @@ describe("ENDPOINT /pause - needs to test during a race!", () =>
                 
                 setTimeout(() =>
                 {
-                    const test = request(app).post("/pause");
+                    const test = request(app).post("/api/pause");
                     test.cookies = sessionCookie;
                     
                     test.send({ raceId: thisRaceId })
@@ -1319,7 +1314,7 @@ describe("ENDPOINT /pause - needs to test during a race!", () =>
                             
                             setTimeout(() =>
                             {
-                                const test = request(app).patch("/pause");
+                                const test = request(app).patch("/api/pause");
                                 test.cookies = sessionCookie;
                                 
                                 test.send({ raceId: thisRaceId })
@@ -1345,7 +1340,7 @@ describe("ENDPOINT /pause - needs to test during a race!", () =>
         let pauseStartTime = 0;
         let pauseTotal = 0;
 
-        const startRace = request(app).post("/race");
+        const startRace = request(app).post("/api/race");
         startRace.cookies = sessionCookie;
         startRace.expect(/race started/)
             .end((err, res) =>
@@ -1361,7 +1356,7 @@ describe("ENDPOINT /pause - needs to test during a race!", () =>
                 
                 setTimeout(() =>
                 {
-                    const test = request(app).post("/pause");
+                    const test = request(app).post("/api/pause");
                     test.cookies = sessionCookie;
                     
                     test.send({ raceId: thisRaceId })
@@ -1378,7 +1373,7 @@ describe("ENDPOINT /pause - needs to test during a race!", () =>
 
                             setTimeout(() =>
                             {
-                                const unpause = request(app).patch("/pause");
+                                const unpause = request(app).patch("/api/pause");
                                 unpause.cookies = sessionCookie;
                                 
                                 unpause.send({ raceId: thisRaceId })
@@ -1396,7 +1391,7 @@ describe("ENDPOINT /pause - needs to test during a race!", () =>
                                         
                                         setTimeout(() =>
                                         {
-                                            const test = request(app).patch("/race");
+                                            const test = request(app).patch("/api/race");
                                             test.cookies = sessionCookie;
                                             endTime = Date.now();
                                             const raceTotal = (endTime - startTime) - pauseTotal;

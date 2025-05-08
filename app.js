@@ -41,7 +41,7 @@ export default function defineApi(app, races)
     }
     
     
-    app.get("/session", (request, response) =>
+    app.get("/api/session", (request, response) =>
     {
         if(request.session.userId)
         {
@@ -65,7 +65,7 @@ export default function defineApi(app, races)
             });
     });
 
-    app.post("/session", (request, response) =>
+    app.post("/api/session", (request, response) =>
     {
         if(request.session.userId)
         {
@@ -92,7 +92,7 @@ export default function defineApi(app, races)
             });
     });
         
-    app.delete('/session', (request, response) =>
+    app.delete('/api/session', (request, response) =>
     {
         console.log('Destroying session');
         request.session.destroy(() =>
@@ -107,7 +107,7 @@ export default function defineApi(app, races)
         });
     });
         
-    app.post('/name', (request, response) =>
+    app.post('/api/name', (request, response) =>
     {
         if(!request.session.userId)
         {
@@ -163,7 +163,7 @@ export default function defineApi(app, races)
     
     });
     
-    app.get('/counters', (request, response) =>
+    app.get('/api/counters', (request, response) =>
     {
         if(!request.session.userId)
         {
@@ -208,7 +208,7 @@ export default function defineApi(app, races)
     
     });
 
-    app.get('/counters/:mode', (request, response) =>
+    app.get('/api/counters/:mode', (request, response) =>
     {
         if(!request.session.userId)
         {
@@ -256,7 +256,7 @@ export default function defineApi(app, races)
         
     });
 
-    app.post('/counters/:mode', (request, response) =>
+    app.post('/api/counters/:mode', (request, response) =>
     {
         if(!request.session.userId)
         {
@@ -324,7 +324,7 @@ export default function defineApi(app, races)
             });
     });
     
-    app.get('/race', (request, response) =>
+    app.get('/api/race', (request, response) =>
     {
         const params = {
             sort: "ASC",
@@ -405,7 +405,7 @@ export default function defineApi(app, races)
             });
     });
 
-    app.post('/race', (request, response) =>
+    app.post('/api/race', (request, response) =>
     {
         if(!request.session.userId)
         {
@@ -437,7 +437,7 @@ export default function defineApi(app, races)
             });
     });
 
-    app.post("/pause", (request, response) =>
+    app.post("/api/pause", (request, response) =>
     {
         if(!request.session.userId)
         {
@@ -502,7 +502,7 @@ export default function defineApi(app, races)
 
     });
 
-    app.patch("/pause", (request, response) =>
+    app.patch("/api/pause", (request, response) =>
         {
             if(!request.session.userId)
             {
@@ -570,7 +570,7 @@ export default function defineApi(app, races)
     
 
 
-    app.patch("/race", (request, response) =>
+    app.patch("/api/race", (request, response) =>
     {
         if(!request.session.userId)
         {
@@ -680,7 +680,7 @@ export default function defineApi(app, races)
             });
     });
 
-    app.delete('/race', (request, response) =>
+    app.delete('/api/race', (request, response) =>
     {
         if(!request.session.userId)
         {
