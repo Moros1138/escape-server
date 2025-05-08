@@ -91,6 +91,47 @@ app.use(session(sessionConfig));
 
 defineApi(app, races);
 
+app.get('/stats', (request, response) =>
+{
+    if(!request.session.userId)
+    {
+        response
+            .set("Content-Type", "text/html")
+            .status(401)
+            .send(`<html><head><title>Unauthorized</title></head><body><center><h1>Unauthorized</h1><p>You do not have the rights to see this content.</p></center></body></html>`);
+
+        return;
+    }
+
+    let results = null;
+    try
+    {
+        const stmt = races.prepare(`SELECT * FROM counters;`);
+        results = stmt.all();
+    }
+    catch(e)
+    {
+        response.status(404)
+            .set("Content-Type", "text/html")
+            .send(`<html><head><title>Not Found</title></head><body><center><h1>Not Found</h1><p>The content you are looking for can not be found at the location you specified.</p></center></body></html>`);
+
+        return;
+    }    
+    let pageContent = `<html><head><title>Stats | Escape the Machine</title></head><body><h1>Completion Counters</h1>{{ results }}</body></html>`;
+    let resultsContent = ``;
+
+    results.forEach((result) =>
+    {
+        resultsContent += `<p>${result.mode}: ${result.count}</p>`;
+    });
+
+    pageContent = pageContent.replace('{{ results }}', resultsContent);
+
+    response.status(200)
+        .set("Content-Type", "text/html")
+        .send(pageContent);
+});
+
 app.listen(port, () =>
 {
     console.log(`Listening on http://localhost:${port}`);

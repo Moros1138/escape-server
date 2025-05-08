@@ -106,7 +106,7 @@ export default function defineApi(app, races)
                 });
         });
     });
-        
+    
     app.post('/api/name', (request, response) =>
     {
         if(!request.session.userId)
@@ -162,7 +162,7 @@ export default function defineApi(app, races)
             });
     
     });
-    
+
     app.get('/api/counters', (request, response) =>
     {
         if(!request.session.userId)
